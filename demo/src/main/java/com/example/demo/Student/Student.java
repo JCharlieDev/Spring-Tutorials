@@ -1,13 +1,8 @@
 package com.example.demo.Student;
 
 import java.time.LocalDate;
-import javax.annotation.Generated;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import java.time.Period;
+import javax.persistence.*;
 
 @Entity // For Hibernate
 @Table // For our database
@@ -26,6 +21,7 @@ public class Student
     )
     private Long id;
     private String name;
+    @Transient
     private Integer age;
     private LocalDate dob;
     private String email;
@@ -35,14 +31,22 @@ public class Student
     {
         
     }
-    public Student(Long id, String name, Integer age, LocalDate dob, String email)
+
+    public Student(Long id, String name, LocalDate dob, String email)
     {
         this.id = id;
         this.name = name;
-        this.age = age;
         this.dob = dob;
         this.email = email;
     }
+
+    public Student(String name, LocalDate dob, String email)
+    {
+        this.name = name;
+        this.dob = dob;
+        this.email = email;
+    }
+
     public Long getId()
     {
         return id;
@@ -61,7 +65,7 @@ public class Student
     }
     public Integer getAge()
     {
-        return age;
+        return Period.between(this.dob, LocalDate.now()).getYears();
     }
     public void setAge(Integer age)
     {
@@ -69,7 +73,7 @@ public class Student
     }
     public LocalDate getDob()
     {
-        return dob;
+        return this.dob;
     }
     public void setDob(LocalDate dob)
     {
